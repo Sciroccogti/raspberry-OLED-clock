@@ -128,12 +128,13 @@ def main():
                     draw.text((0, timeSize + topOffset * 2 - 1), minStr, font=ehsmbFont, fill="white")
                     draw.text((0, 2 * timeSize + topOffset * 3 - 2), today_date, font=Font16, fill="white")
                     draw.text((64 - dateSize, 2 * timeSize + topOffset * 3 - 3), WEEK[today_week], font=Font16, fill="white")
-                    draw.bitmap((0, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp0, fill="white")
-                    draw.bitmap((26, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp1, fill="white")
-                    draw.bitmap((44, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp2, fill="white")
-                    draw.text((26 + 1, device.height - 9), name1, font=Font7, fill="white")
-                    draw.text((44 + 1, device.height - 9), name2, font=Font7, fill="white")
-                    draw.line((0, device.height - 1, device.width - 1, device.height - 1), fill="white")
+                    if weatherOK:
+                        draw.bitmap((0, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp0, fill="white")
+                        draw.bitmap((26, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp1, fill="white")
+                        draw.bitmap((44, 2 * timeSize + dateSize + topOffset * 2 - 2), bmp2, fill="white")
+                        draw.text((26 + 1, device.height - 9), name1, font=Font7, fill="white")
+                        draw.text((44 + 1, device.height - 9), name2, font=Font7, fill="white")
+                        draw.line((0, device.height - 1, device.width - 1, device.height - 1), fill="white")
                     # draw.text((24
         time.sleep(20)
 
