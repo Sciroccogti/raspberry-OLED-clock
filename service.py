@@ -1,12 +1,15 @@
 import requests
 import json
+import hashlib
+from privateAPI import private
 
 def GetWeatherInfo():
     '''
     返回fore、now、text
     若text为''，则无报错
     '''
-    urlip = "https://restapi.amap.com/v3/ip?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c"
+    hlIP = hashlib.md5(private.encode("utf-8")).hexdigest()
+    urlip = "https://restapi.amap.com/v3/ip?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&sig=" + hlIP
     text = ''
     try:
         respond = requests.get(urlip)
@@ -16,8 +19,10 @@ def GetWeatherInfo():
         adcode = 320115 # 南京
         text += '%s ' % error
 
-    urlfore = "https://restapi.amap.com/v3/weather/weatherInfo?city=%s&key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&extensions=all" % adcode
-    urlnow = "https://restapi.amap.com/v3/weather/weatherInfo?city=%s&key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&extensions=base" % adcode
+    hlAll = hashlib.md5(("city=%s&extensions=all" % adcode + private).encode("utf-8")).hexdigest()
+    hlBase = hashlib.md5(("city=%s&extensions=base" % adcode + private).encode("utf-8")).hexdigest()
+    urlfore = "https://restapi.amap.com/v3/weather/weatherInfo?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&city=%s&extensions=all&sig=" % adcode + hlAll
+    urlnow = "https://restapi.amap.com/v3/weather/weatherInfo?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&city=%s&extensions=base&sig=" % adcode + hlBase
     # 昆山：320583
     try:
         respond = requests.get(urlfore)
