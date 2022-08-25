@@ -1,28 +1,26 @@
 import requests
 import json
 import hashlib
-from privateAPI import private
+from privateAPI import private, key, location
 
 def GetWeatherInfo():
     '''
     返回fore、now、text
     若text为''，则无报错
     '''
-    hlIP = hashlib.md5(private.encode("utf-8")).hexdigest()
-    urlip = "https://restapi.amap.com/v3/ip?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&sig=" + hlIP
+#    hlIP = hashlib.md5(private.encode("utf-8")).hexdigest()
+#    urlip = "https://restapi.amap.com/v3/ip?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&sig=" + hlIP
     text = ''
-    try:
-        respond = requests.get(urlip)
-        locate = json.loads(respond.text)
-        adcode = locate['adcode']
-    except Exception as error:
-        adcode = 320115 # 南京
-        text += '%s ' % error
+#    try:
+#        respond = requests.get(urlip)
+#        locate = json.loads(respond.text)
+#        adcode = locate['adcode']
+#    except Exception as error:
+#        adcode = 320115 # 南京
+#        text += '%s ' % error
 
-    hlAll = hashlib.md5(("city=%s&extensions=all" % adcode + private).encode("utf-8")).hexdigest()
-    hlBase = hashlib.md5(("city=%s&extensions=base" % adcode + private).encode("utf-8")).hexdigest()
-    urlfore = "https://restapi.amap.com/v3/weather/weatherInfo?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&city=%s&extensions=all&sig=" % adcode + hlAll
-    urlnow = "https://restapi.amap.com/v3/weather/weatherInfo?key=2f84cf79e4e4e7b7b055fdb65bdb7d2c&city=%s&extensions=base&sig=" % adcode + hlBase
+    urlfore = "https://devapi.qweather.com/v7/weather/3d?key=%s&location=%s" % (key, location)
+    urlnow = "https://devapi.qweather.com/v7/weather/now?key=%s&location=%s" % (key, location)
     # 昆山：320583
     try:
         respond = requests.get(urlfore)
@@ -30,7 +28,6 @@ def GetWeatherInfo():
 
         respond = requests.get(urlnow)
         now = json.loads(respond.text)
-        # #将JSON编码的字符串转换回Python数据结构
     except Exception as error:
         text += '%s ' % error
         fore = now = None
